@@ -55,13 +55,20 @@ class OpcacheClass
             $compiled = 0;
 
             // Get files in these paths
-            $files = collect(Finder::create()->in(config('opcache.directories'))
-                ->name('*.php')
-                ->ignoreUnreadableDirs()
-                ->notContains('#!/usr/bin/env php')
-                ->exclude(config('opcache.exclude'))
-                ->files()
-                ->followLinks());
+            $files = LazyCollection::make(function () {
+                $finder = Finder::create()
+                    ->in(config('opcache.directories'))
+                    ->name('*.php')
+                    ->ignoreUnreadableDirs()
+                    ->notContains('#!/usr/bin/env php')
+                    ->exclude(config('opcache.exclude'))
+                    ->files()
+                    ->followLinks();
+
+                foreach ($finder as $file) {
+                    yield $file;
+                }
+            });            
 
             // optimized files
             $files->each(function ($file) use (&$compiled) {
