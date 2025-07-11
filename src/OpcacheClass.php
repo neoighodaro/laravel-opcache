@@ -42,7 +42,7 @@ class OpcacheClass
     /**
      * Pre-compile php scripts.
      *
-     * @param bool $force
+     * @param  bool $force
      * @return array
      */
     public function compile($force = false)
@@ -68,7 +68,7 @@ class OpcacheClass
                 foreach ($finder as $file) {
                     yield $file;
                 }
-            });            
+            });
 
             // optimized files
             $files->each(function ($file) use (&$compiled) {
